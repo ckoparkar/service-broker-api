@@ -1,2 +1,2 @@
 # cf-postgresql-broker
-A Cloud Foundry service to manage PostgreSQL databases.
+CF PostgreSQL broker provides PostgreSQL databases as a Cloud Foundry service. This uses Service Broker API v2.4.
