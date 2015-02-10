@@ -26,3 +26,6 @@ catalog:
                   usd: 0.0
                 unit: MONTHLY
             displayName: Development
+basic_auth:
+  username: admin
+  password: admin
