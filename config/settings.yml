@@ -29,3 +29,9 @@ catalog:
 basic_auth:
   username: admin
   password: admin
+
+postgresql:
+  host: localhost
+  username: admin
+  password: admin
+  port: 5432
