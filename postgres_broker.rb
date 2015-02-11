@@ -40,7 +40,7 @@ class PostgresBroker < Sinatra::Base
   private
 
   def self.app_settings
-    YAML.load_file('config/settings.yml')
+    @app_settings ||= YAML.load_file('config/settings.yml')
   end
 
   def postgres_service
