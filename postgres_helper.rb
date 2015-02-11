@@ -24,7 +24,7 @@ class PostgresHelper
     begin
       yield if block_given?
     rescue => e
-      if e.message.match /already exists/
+      if e.message.match /database \".*\" already exists/
         raise DatabaseAlreadyExistsError
       elsif e.message.match /could not connect/
         raise ServerNotReachableError
