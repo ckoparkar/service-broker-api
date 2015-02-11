@@ -12,10 +12,19 @@ class PostgresHelper
   end
 
   def create_database(db_name, username)
-    begin
+    run_safely do
       connection.exec("CREATE DATABASE #{db_name}")
       connection.exec("CREATE USER #{username} WITH PASSWORD '#{username}'")
       connection.exec("GRANT ALL PRIVILEGES ON DATABASE #{db_name} TO #{username}")
+    end
+    "http://#{@host}:#{@port}/databases/#{db_name}/#{username}"
+  end
+
+  private
+
+  def run_safely
+    begin
+      yield if block_given?
     rescue => e
       if e.message.match /already exists/
         raise DatabaseAlreadyExistsError
@@ -25,7 +34,6 @@ class PostgresHelper
         raise StandardError
       end
     end
-    "http://#{@host}:#{@port}/databases/#{db_name}/#{username}"
   end
 
   def connection
