@@ -11,13 +11,11 @@ class PostgresHelper
     @port = params['port']
   end
 
-  def create_database(db_name, username)
+  def create_database(db_name)
     run_safely do
       connection.exec("CREATE DATABASE #{db_name}")
-      connection.exec("CREATE USER #{username} WITH PASSWORD '#{username}'")
-      connection.exec("GRANT ALL PRIVILEGES ON DATABASE #{db_name} TO #{username}")
     end
-    "http://#{@host}:#{@port}/databases/#{db_name}/#{username}"
+    "http://#{@host}:#{@port}/databases/#{db_name}"
   end
 
   private

@@ -15,7 +15,7 @@ This broker only implements a subset of the [Services API](http://docs.cloudfoun
 API | Result |
 --- | :----- |
 /v2/catalog | Advertises the service and its plans offered in CF marketplace. |
-/v2/service_instances/id | Creates a database `d-id` and user `u-id`. |
+/v2/service_instances/id | Creates a database `d-id`. |
 
 ## Configuration
 The file `config/settings.yml` configures:

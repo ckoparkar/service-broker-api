@@ -19,11 +19,11 @@ class PostgresBroker < Sinatra::Base
 
   put '/v2/service_instances/:id' do |id|
     content_type :json
-    username = "u#{id}"
+
     db_name = "d#{id}"
 
     begin
-      db_url = postgres_service.create_database(db_name, username)
+      db_url = postgres_service.create_database(db_name)
       status 201
       {'dashboard_url' => db_url}.to_json
     rescue DatabaseAlreadyExistsError
