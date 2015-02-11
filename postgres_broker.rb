@@ -37,6 +37,30 @@ class PostgresBroker < Sinatra::Base
     end
   end
 
+  put '/v2/service_instances/:instance_id/service_bindings/:binding_id' do |instance_id, binding_id|
+    content_type :json
+
+    db_name = "d#{instance_id}"
+    username = "u#{binding_id}"
+
+    begin
+      credentials = postgres_service.create_user(username, db_name)
+      status 201
+      {'credentials' => credentials}.to_json
+    rescue UserAlreadyExistsError
+      status 409
+      {'description' => "The user #{username} already exists."}.to_json
+    rescue DatabaseDoesNotExistsError
+      status 410
+      {'description' => "The database #{db_name} does not exist."}.to_json
+    rescue ServerNotReachableError
+      status 500
+      {'description' => 'PostgreSQL server is not reachable'}.to_json
+    rescue => e
+      {'description' => e.message}.to_json
+    end
+  end
+
   private
 
   def self.app_settings

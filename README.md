@@ -16,6 +16,7 @@ API | Result |
 --- | :----- |
 /v2/catalog | Advertises the service and its plans offered in CF marketplace. |
 /v2/service_instances/id | Creates a database `d-id`. |
+/v2/service_instances/instance_id/service_bindings/binding_id | Creates a user `binding_id` and grants him privileges on database `instance_id`
 
 ## Configuration
 The file `config/settings.yml` configures:

@@ -2,6 +2,8 @@ require 'pg'
 
 class ServerNotReachableError < StandardError; end
 class DatabaseAlreadyExistsError < StandardError; end
+class UserAlreadyExistsError < StandardError; end
+class DatabaseDoesNotExistsError < StandardError; end
 
 class PostgresHelper
   def initialize(params)
@@ -18,6 +20,22 @@ class PostgresHelper
     "http://#{@host}:#{@port}/databases/#{db_name}"
   end
 
+  def create_user(username, db_name)
+    run_safely do
+      connection.exec("CREATE USER #{username} WITH PASSWORD '#{username}'")
+      connection.exec("GRANT ALL PRIVILEGES ON DATABASE #{db_name} TO #{username}")
+    end
+    {
+      hostname: @host,
+      port: @port,
+      db_name: db_name,
+      username: username,
+      password: username,
+      uri: "postgresql://#{username}:#{username}@#{@host}:#{@port}/#{db_name}",
+      jdbcUrl: "jdbc:postgresql://#{username}:#{username}@#{@host}:#{@port}/#{db_name}"
+    }
+  end
+
   private
 
   def run_safely
@@ -26,6 +44,10 @@ class PostgresHelper
     rescue => e
       if e.message.match /database \".*\" already exists/
         raise DatabaseAlreadyExistsError
+      elsif e.message.match /role \".*\" already exists/
+        raise UserAlreadyExistsError
+      elsif e.message.match /database \".*\" does not exist/
+        raise DatabaseDoesNotExistsError
       elsif e.message.match /could not connect/
         raise ServerNotReachableError
       else
