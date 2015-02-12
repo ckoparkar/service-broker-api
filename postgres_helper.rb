@@ -15,6 +15,7 @@ class PostgresHelper
   end
 
   def create_database(db_name)
+    db_name = escape_dashes(db_name)
     run_safely do
       connection.exec("CREATE DATABASE #{db_name}")
     end
@@ -22,6 +23,8 @@ class PostgresHelper
   end
 
   def create_user(username, db_name)
+    db_name = escape_dashes(db_name)
+    username = escape_dashes(username)
     run_safely do
       connection.exec("CREATE USER #{username} WITH PASSWORD '#{username}'")
       connection.exec("GRANT ALL PRIVILEGES ON DATABASE #{db_name} TO #{username}")
@@ -38,6 +41,7 @@ class PostgresHelper
   end
 
   def delete_user(username)
+    username = escape_dashes(username)
     run_safely do
       connection.exec("DROP OWNED BY #{username} CASCADE")
       connection.exec("DROP ROLE #{username}")
@@ -69,5 +73,9 @@ class PostgresHelper
   def connection
     PG.connect(host: @host, user: @username,
                port: @port, dbname: 'postgres')
+  end
+
+  def escape_dashes(n)
+    n.gsub('-','_')
   end
 end
