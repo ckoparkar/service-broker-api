@@ -17,6 +17,7 @@ class PostgresBroker < Sinatra::Base
     self.class.app_settings.fetch('catalog').to_json
   end
 
+  # PROVISION
   put '/v2/service_instances/:id' do |id|
     content_type :json
 
@@ -37,6 +38,7 @@ class PostgresBroker < Sinatra::Base
     end
   end
 
+  #BIND
   put '/v2/service_instances/:instance_id/service_bindings/:binding_id' do |instance_id, binding_id|
     content_type :json
 
@@ -53,6 +55,27 @@ class PostgresBroker < Sinatra::Base
     rescue DatabaseDoesNotExistsError
       status 410
       {'description' => "The database #{db_name} does not exist."}.to_json
+    rescue ServerNotReachableError
+      status 500
+      {'description' => 'PostgreSQL server is not reachable'}.to_json
+    rescue => e
+      {'description' => e.message}.to_json
+    end
+  end
+
+  #UNBIND
+  delete '/v2/service_instances/:instance_id/service_bindings/:binding_id' do |instance_id, binding_id|
+    content_type :json
+
+    username = "u#{binding_id}"
+
+    begin
+      postgres_service.delete_user(username)
+      status 200
+      {}.to_json
+    rescue UserDoesNotExistsError
+      status 410
+      {'description' => "The user #{username} does not exist."}.to_json
     rescue ServerNotReachableError
       status 500
       {'description' => 'PostgreSQL server is not reachable'}.to_json

@@ -2,8 +2,9 @@ require 'pg'
 
 class ServerNotReachableError < StandardError; end
 class DatabaseAlreadyExistsError < StandardError; end
+class DatabaseDoesNotExistError < StandardError; end
 class UserAlreadyExistsError < StandardError; end
-class DatabaseDoesNotExistsError < StandardError; end
+class UserDoesNotExistError < StandardError; end
 
 class PostgresHelper
   def initialize(params)
@@ -36,6 +37,13 @@ class PostgresHelper
     }
   end
 
+  def delete_user(username)
+    run_safely do
+      connection.exec("DROP OWNED BY #{username} CASCADE")
+      connection.exec("DROP ROLE #{username}")
+    end
+  end
+
   private
 
   def run_safely
@@ -44,10 +52,12 @@ class PostgresHelper
     rescue => e
       if e.message.match /database \".*\" already exists/
         raise DatabaseAlreadyExistsError
+      elsif e.message.match /database \".*\" does not exist/
+        raise DatabaseDoesNotExistError
       elsif e.message.match /role \".*\" already exists/
         raise UserAlreadyExistsError
-      elsif e.message.match /database \".*\" does not exist/
-        raise DatabaseDoesNotExistsError
+      elsif e.message.match /role \".*\" does not exist/
+        raise UserDoesNotExistError
       elsif e.message.match /could not connect/
         raise ServerNotReachableError
       else
