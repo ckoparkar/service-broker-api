@@ -84,6 +84,27 @@ class PostgresBroker < Sinatra::Base
     end
   end
 
+  #DE-PROVISION
+  delete '/v2/service_instances/:instance_id' do |instance_id|
+    content_type :json
+
+    db_name = "d#{instance_id}"
+
+    begin
+      postgres_service.delete_database(db_name)
+      status 200
+      {}.to_json
+    rescue DatabaseDoesNotExistsError
+      status 410
+      {'description' => "The database #{db_name} does not exist."}.to_json
+    rescue ServerNotReachableError
+      status 500
+      {'description' => 'PostgreSQL server is not reachable'}.to_json
+    rescue => e
+      {'description' => e.message}.to_json
+    end
+  end
+
   private
 
   def self.app_settings

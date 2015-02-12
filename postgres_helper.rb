@@ -48,6 +48,13 @@ class PostgresHelper
     end
   end
 
+  def delete_database(db_name)
+    db_name = escape_dashes(db_name)
+    run_safely do
+      connection.exec("DROP DATABASE #{db_name}")
+    end
+  end
+
   private
 
   def run_safely
