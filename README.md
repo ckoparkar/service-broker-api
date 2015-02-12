@@ -17,7 +17,8 @@ API | Result |
 GET /v2/catalog | Advertises the service and its plans offered in CF marketplace. |
 PUT /v2/service_instances/:id | Creates a database `d-id`. |
 PUT /v2/service_instances/:instance_id/service_bindings/:binding_id | Creates a user `u-binding_id` and grants him privileges on database `d-instance_id`
-DELETE /v2/service_instances/:instance_id/service_bindings/:binding_id | DELETES the user `u-binding_id` and all objects owned by him.
+DELETE /v2/service_instances/:instance_id/service_bindings/:binding_id | Deletes the user `u-binding_id` and all objects owned by him.
+DELETE /v2/service_instances/:instance_id | Deletes the database `d-instance_id`.
 
 ## Configuration
 The file `config/settings.yml` configures:
