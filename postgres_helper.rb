@@ -82,7 +82,7 @@ class PostgresHelper
   end
 
   def connection
-    PG.connect(host: @host, user: @username,
-               port: @port, dbname: 'postgres')
+    @conn ||= PG.connect(host: @host, user: @username,
+                         port: @port, dbname: 'postgres')
   end
 end

@@ -112,7 +112,12 @@ class PostgresBroker < Sinatra::Base
   end
 
   def postgres_service
-    postgres_settings = self.class.app_settings.fetch('postgresql')
+    postgres_settings = {
+      'host' => ENV['POSTGRESQL_HOST'] || 'localhost',
+      'username' => ENV['POSTGRESQL_USERNAME'] || 'admin',
+      'password' => ENV['POSTGRESQL_PASSWORD'] || 'admin',
+      'port' => ENV['POSTGRESQL_PORT'].to_i || 5432,
+    }
     PostgresHelper.new(postgres_settings)
   end
 end
