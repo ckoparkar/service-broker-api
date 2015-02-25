@@ -85,4 +85,8 @@ class PostgresHelper
     @conn ||= PG.connect(host: @host, user: @username,
                          port: @port, dbname: 'postgres')
   end
+
+  def escape_dashes(n)
+    n.gsub('-','_')
+  end
 end
