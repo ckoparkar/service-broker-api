@@ -18,6 +18,7 @@ class PostgresHelper
     db_name = escape_dashes(db_name)
     run_safely do
       connection.exec("CREATE DATABASE #{db_name}")
+      connection.exec("REVOKE ALL ON DATABASE #{db_name} FROM public")
     end
     "http://#{@host}:#{@port}/databases/#{db_name}"
   end
