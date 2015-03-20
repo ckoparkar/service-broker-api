@@ -1,7 +1,12 @@
 $: << File.expand_path("../../lib", File.dirname(__FILE__))
 
-require 'capybara'
-require 'capybara/cucumber'
 require_relative '../../postgres_broker'
 
-Capybara.app = PostgresBroker
+require 'rack/test'
+module AppHelper
+  def app
+	PostgresBroker
+  end
+end
+
+World(Rack::Test::Methods, AppHelper)
