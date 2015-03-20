@@ -12,7 +12,9 @@ end
 
 group :test do
   gem 'cucumber'
+  gem 'cucumber-api-steps'
   gem 'rspec'
   gem 'rack-test'
   gem 'watchr'
+  gem 'nokogiri'
 end
