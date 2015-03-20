@@ -4,10 +4,11 @@ require 'yaml'
 require_relative 'postgres_helper'
 
 class PostgresBroker < Sinatra::Base
-  use Rack::Auth::Basic do |username, password|
-    credentials = self.app_settings.fetch('basic_auth')
-    username == credentials.fetch('username') and password == credentials.fetch('password')
-  end
+  # use Rack::Auth::Basic do |username, password|
+  #   credentials = self.app_settings.fetch('basic_auth')
+  #   username == credentials.fetch('username') and password == credentials.fetch('password')
+  # end
+  
   get '/' do
     "hello world"
   end
