@@ -5,4 +5,13 @@ gem 'sinatra'
 gem 'json'
 gem 'pg'
 gem 'rake'
-gem 'pry'
+
+group :development do
+  gem 'pry'
+end
+
+group :test do
+  gem 'cucumber'
+  gem 'rspec'
+  gem 'capybara'
+end
