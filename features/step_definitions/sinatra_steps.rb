@@ -1,4 +1,4 @@
-When(/^I GET on "(.*?)"$/) do |path|
+When(/^I GET request for "(.*?)"$/) do |path|
   get path
 end
 

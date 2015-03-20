@@ -26,3 +26,8 @@ The file `config/settings.yml` configures:
 * Catalog of services and plans available to users.
 * Basic auth credentials to be used by CF to authenticate with the broker.
 * PostgreSQL credentials and connection details.
+
+## Development
+The broker is tested using cucumber features.
+To test continuously:
+    `$  watchr watch-tests.watchr`

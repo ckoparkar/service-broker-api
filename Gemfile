@@ -14,4 +14,5 @@ group :test do
   gem 'cucumber'
   gem 'rspec'
   gem 'rack-test'
+  gem 'watchr'
 end
