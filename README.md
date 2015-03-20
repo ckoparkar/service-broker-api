@@ -1,4 +1,4 @@
-# cf-postgresql-broker
+# cf-postgresql-broker [![Build Status](https://travis-ci.org/cskksc/cf-postgresql-broker.svg)](https://travis-ci.org/cskksc/cf-postgresql-broker)
 CF PostgreSQL broker provides PostgreSQL databases as a Cloud Foundry service. This uses Service Broker API v2.4.
 
 ## Usage
