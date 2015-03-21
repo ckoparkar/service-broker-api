@@ -1,3 +1,13 @@
+Before do
+  postgresql_service = double
+  allow(PostgresHelper).to receive(:new).with({"host"=>"localhost",
+                                               "username"=>"admin",
+                                               "password"=>"admin",
+                                               "port"=>0}).and_return(postgresql_service)
+
+  allow(postgresql_service).to receive(:create_database).with('d1').and_return('http://127.0.0.1:5432/databases/mydb')
+end
+
 Then(/^I should see "(.*?)"$/) do |text|
   expect(last_response).to match text
 end
