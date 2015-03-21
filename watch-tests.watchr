@@ -19,7 +19,7 @@ end
 
 run_all_tests
 watch('.*.feature') { |file| run_test file }
-watch('.*.el') { run_all_tests }
+watch('.*.rb') { run_all_tests }
 
 # Ctrl-\
 Signal.trap 'QUIT' do
