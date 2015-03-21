@@ -23,7 +23,6 @@ class PostgresBroker < Sinatra::Base
     content_type :json
 
     db_name = "d#{id}"
-
     begin
       db_url = postgres_service.create_database(db_name)
       status 201
@@ -35,6 +34,7 @@ class PostgresBroker < Sinatra::Base
       status 500
       {'description' => 'PostgreSQL server is not reachable'}.to_json
     rescue => e
+      status 501
       {'description' => e.message}.to_json
     end
   end
@@ -60,6 +60,7 @@ class PostgresBroker < Sinatra::Base
       status 500
       {'description' => 'PostgreSQL server is not reachable'}.to_json
     rescue => e
+      status 501
       {'description' => e.message}.to_json
     end
   end
@@ -81,6 +82,7 @@ class PostgresBroker < Sinatra::Base
       status 500
       {'description' => 'PostgreSQL server is not reachable'}.to_json
     rescue => e
+      status 501
       {'description' => e.message}.to_json
     end
   end
@@ -102,6 +104,7 @@ class PostgresBroker < Sinatra::Base
       status 500
       {'description' => 'PostgreSQL server is not reachable'}.to_json
     rescue => e
+      status 501
       {'description' => e.message}.to_json
     end
   end
