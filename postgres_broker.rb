@@ -53,7 +53,7 @@ class PostgresBroker < Sinatra::Base
     rescue UserAlreadyExistsError
       status 409
       {'description' => "The user #{username} already exists."}.to_json
-    rescue DatabaseDoesNotExistsError
+    rescue DatabaseDoesNotExistError
       status 410
       {'description' => "The database #{db_name} does not exist."}.to_json
     rescue ServerNotReachableError
