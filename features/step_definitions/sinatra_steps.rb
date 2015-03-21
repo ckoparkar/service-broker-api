@@ -31,3 +31,7 @@ end
 When(/^the server is not reachable$/) do
   @databases = nil
 end
+
+Then /^the response status should be "([^"]*)"$/ do |status|
+  expect(last_response.status).to eq status.to_i
+end
