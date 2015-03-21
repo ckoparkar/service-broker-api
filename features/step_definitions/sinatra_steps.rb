@@ -10,7 +10,7 @@ When(/^I send a GET request to "(.*?)"$/) do |path|
   get path
 end
 
-When(/^I create a service instance with :instance_id (\d+)$/) do |instance_id|
+When(/^I create a service instance with :instance_id "(.*?)"$/) do |instance_id|
   path = "/v2/service_instances/#{instance_id}"
   
   postgresql_service = double
