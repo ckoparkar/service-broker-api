@@ -6,7 +6,7 @@ Then(/^I should see "(.*?)"$/) do |text|
   expect(last_response).to match text
 end
 
-When /^I send GET request to "([^"]*)"/ do |path|
+When(/^I send a GET request to "(.*?)"$/) do |path|
   get path
 end
 
