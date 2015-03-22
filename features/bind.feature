@@ -14,14 +14,6 @@ Feature: As a user I can bind my apps to service instances
     And I bind app with :binding_id "1" to a service_instance with :instance_id "1"
     Then the response status should be "409"
 
-  Scenario: I try to create a duplicate service instance
-    When I create a service instance with :instance_id "1"
-    Then the response status should be "201"
-    And I bind app with :binding_id "1" to a service_instance with :instance_id "1"
-    Then the response status should be "201"
-    And I bind app with :binding_id "1" to a service_instance with :instance_id "1"
-    Then the response status should be "409"
-
   Scenario: Consequtive bindings
     When I create a service instance with :instance_id "1"
     Then the response status should be "201"
