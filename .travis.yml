@@ -6,3 +6,6 @@ gemfile: Gemfile
 notifications:
   email: false
 script: "./run-tests.sh"
+addons:
+  code_climate:
+    repo_token: 51af7c283a81da94f01b6c5d14d7758e0e6a6aa895b69e2db4e673a4c9b82adf

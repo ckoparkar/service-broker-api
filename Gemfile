@@ -16,4 +16,5 @@ group :test do
   gem 'rack-test'
   gem 'watchr'
   gem 'nokogiri'
+  gem 'codeclimate-test-reporter'
 end
