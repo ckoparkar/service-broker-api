@@ -6,7 +6,7 @@ class DatabaseDoesNotExistError < StandardError; end
 class UserAlreadyExistsError < StandardError; end
 class UserDoesNotExistError < StandardError; end
 
-class PostgresHelper
+class PostgresqlHelper
   def initialize(params)
     @host = params['host']
     @username = params['username']

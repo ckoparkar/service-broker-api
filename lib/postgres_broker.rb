@@ -1,9 +1,9 @@
 require 'sinatra/base'
 require 'json'
 require 'yaml'
-require_relative 'postgres_helper'
+require_relative 'postgresql_helper'
 
-class PostgresBroker < Sinatra::Base
+class PostgresqlBroker < Sinatra::Base
   # use Rack::Auth::Basic do |username, password|
   #   credentials = self.app_settings.fetch('basic_auth')
   #   username == credentials.fetch('username') and password == credentials.fetch('password')
@@ -122,6 +122,6 @@ class PostgresBroker < Sinatra::Base
       'password' => ENV['POSTGRESQL_PASSWORD'] || 'admin',
       'port' => ENV['POSTGRESQL_PORT'].to_i || 5432,
     }
-    PostgresHelper.new(postgres_settings)
+    PostgresqlHelper.new(postgres_settings)
   end
 end

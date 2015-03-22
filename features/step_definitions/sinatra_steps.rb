@@ -15,7 +15,7 @@ When(/^I create a service instance with :instance_id "(.*?)"$/) do |instance_id|
   path = "/v2/service_instances/#{instance_id}"
 
   postgresql_service = double
-  expect(PostgresHelper).to receive(:new).and_return(postgresql_service)
+  expect(PostgresqlHelper).to receive(:new).and_return(postgresql_service)
 
   if @databases.nil?
     expect(postgresql_service).to receive(:create_database).and_raise(ServerNotReachableError)
@@ -33,7 +33,7 @@ When(/^I bind app with :binding_id "(.*?)" to a service_instance with :instance_
   path = "/v2/service_instances/#{instance_id}/service_bindings/#{binding_id}"
 
   postgresql_service = double
-  expect(PostgresHelper).to receive(:new).and_return(postgresql_service)
+  expect(PostgresqlHelper).to receive(:new).and_return(postgresql_service)
 
   if @users.nil?
     expect(postgresql_service).to receive(:create_user).and_raise(ServerNotReachableError)
@@ -52,7 +52,7 @@ end
 When(/^I unbind app with :binding_id "(.*?)" and :instance_id "(.*?)"$/) do |binding_id, instance_id|
   path = "v2/service_instances/#{instance_id}/service_bindings/#{binding_id}"
   postgresql_service = double
-  expect(PostgresHelper).to receive(:new).and_return(postgresql_service)
+  expect(PostgresqlHelper).to receive(:new).and_return(postgresql_service)
 
   if @users.nil?
     expect(postgresql_service).to receive(:delete_user).and_raise(ServerNotReachableError)
@@ -69,7 +69,7 @@ end
 When(/^I un\-provision a service instance with :instance_id "(.*?)"$/) do |instance_id|
   path = "/v2/service_instances/#{instance_id}"
   postgresql_service = double
-  expect(PostgresHelper).to receive(:new).and_return(postgresql_service)
+  expect(PostgresqlHelper).to receive(:new).and_return(postgresql_service)
 
   if @databases.nil?
     expect(postgresql_service).to receive(:delete_database).and_raise(ServerNotReachableError)
