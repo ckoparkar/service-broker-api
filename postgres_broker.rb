@@ -75,7 +75,7 @@ class PostgresBroker < Sinatra::Base
       postgres_service.delete_user(username)
       status 200
       {}.to_json
-    rescue UserDoesNotExistsError
+    rescue UserDoesNotExistError
       status 410
       {'description' => "The user #{username} does not exist."}.to_json
     rescue ServerNotReachableError
