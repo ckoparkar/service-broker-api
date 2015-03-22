@@ -97,7 +97,7 @@ class PostgresBroker < Sinatra::Base
       postgres_service.delete_database(db_name)
       status 200
       {}.to_json
-    rescue DatabaseDoesNotExistsError
+    rescue DatabaseDoesNotExistError
       status 410
       {'description' => "The database #{db_name} does not exist."}.to_json
     rescue ServerNotReachableError

@@ -50,7 +50,7 @@ When(/^I bind app with :binding_id "(.*?)" to a service_instance with :instance_
 end
 
 When(/^I unbind app with :binding_id "(.*?)" and :instance_id "(.*?)"$/) do |binding_id, instance_id|
-  path = "v2/service_instances/#{instance_id}/service_bindings/#{:binding_id}"
+  path = "v2/service_instances/#{instance_id}/service_bindings/#{binding_id}"
   postgresql_service = double
   expect(PostgresHelper).to receive(:new).and_return(postgresql_service)
 
@@ -63,6 +63,21 @@ When(/^I unbind app with :binding_id "(.*?)" and :instance_id "(.*?)"$/) do |bin
     expect(postgresql_service).to receive(:delete_user)
   end
 
+  delete path
+end
+
+When(/^I un\-provision a service instance with :instance_id "(.*?)"$/) do |instance_id|
+  path = "/v2/service_instances/#{instance_id}"
+  postgresql_service = double
+  expect(PostgresHelper).to receive(:new).and_return(postgresql_service)
+
+  if @databases.nil?
+    expect(postgresql_service).to receive(:delete_database).and_raise(ServerNotReachableError)
+  elsif ! @databases.member? instance_id
+    expect(postgresql_service).to receive(:delete_database).and_raise(DatabaseDoesNotExistError)
+  else
+    expect(postgresql_service).to receive(:delete_database)
+  end
   delete path
 end
 
