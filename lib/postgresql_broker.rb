@@ -8,10 +8,6 @@ class PostgresqlBroker < Sinatra::Base
     credentials = self.app_settings.fetch('basic_auth')
     username == credentials.fetch('username') and password == credentials.fetch('password')
   end
-  
-  get '/' do
-    "hello world"
-  end
 
   get '/v2/catalog' do
     content_type :json
