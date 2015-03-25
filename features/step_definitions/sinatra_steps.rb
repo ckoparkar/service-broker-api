@@ -1,6 +1,9 @@
 Before do
   @databases = Set.new
   @users = Set.new
+  username = YAML.load_file("config/settings.yml")["basic_auth"]["username"] || "admin"
+  password = YAML.load_file("config/settings.yml")["basic_auth"]["password"] || "admin"
+  authorize username, password
 end
 
 Then(/^I should see "(.*?)"$/) do |text|
