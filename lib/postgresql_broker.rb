@@ -1,6 +1,6 @@
 require_relative 'postgresql_helper'
 
-module PostgresqlBroker
+class PostgresqlBroker < ServiceBrokerApi
   def create_instance(instance_name)
     service.create_database(instance_name)
   end

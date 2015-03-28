@@ -1,7 +1,6 @@
 require 'sinatra/base'
 require 'json'
 require 'yaml'
-require_relative 'postgresql_broker'
 
 class ServerNotReachableError < StandardError; end
 class ServiceInstanceAlreadyExistsError < StandardError; end
@@ -10,7 +9,6 @@ class BindingAlreadyExistsError < StandardError; end
 class BindingDoesNotExistError < StandardError; end
 
 class ServiceBrokerApi < Sinatra::Base
-  include PostgresqlBroker
 
   use Rack::Auth::Basic do |username, password|
     credentials = self.app_settings.fetch('basic_auth')
