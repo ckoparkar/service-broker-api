@@ -1,9 +1,11 @@
 require 'sinatra/base'
 require 'json'
 require 'yaml'
-require_relative 'postgresql_helper'
+require_relative 'postgresql_broker'
 
 class ServiceBrokerApi < Sinatra::Base
+  include PostgresqlBroker
+
   use Rack::Auth::Basic do |username, password|
     credentials = self.app_settings.fetch('basic_auth')
     username == credentials.fetch('username') and password == credentials.fetch('password')
@@ -18,14 +20,14 @@ class ServiceBrokerApi < Sinatra::Base
   put '/v2/service_instances/:id' do |id|
     content_type :json
 
-    db_name = "d#{id}"
+    instance_name = "d#{id}"
     begin
-      db_url = postgres_service.create_database(db_name)
+      dashboard_url = create_instance(instance_name)
       status 201
-      {'dashboard_url' => db_url}.to_json
+      {'dashboard_url' => dashboard_url}.to_json
     rescue DatabaseAlreadyExistsError
       status 409
-      {'description' => "The database #{db_name} already exists."}.to_json
+      {'description' => "The database #{instance_name} already exists."}.to_json
     rescue ServerNotReachableError
       status 500
       {'description' => 'PostgreSQL server is not reachable'}.to_json
@@ -39,19 +41,19 @@ class ServiceBrokerApi < Sinatra::Base
   put '/v2/service_instances/:instance_id/service_bindings/:binding_id' do |instance_id, binding_id|
     content_type :json
 
-    db_name = "d#{instance_id}"
-    username = "u#{binding_id}"
+    instance_name = "d#{instance_id}"
+    binding_name = "u#{binding_id}"
 
     begin
-      credentials = postgres_service.create_user(username, db_name)
+      credentials = bind_instance(binding_name, instance_name)
       status 201
       {'credentials' => credentials}.to_json
     rescue UserAlreadyExistsError
       status 409
-      {'description' => "The user #{username} already exists."}.to_json
+      {'description' => "The user #{binding_name} already exists."}.to_json
     rescue DatabaseDoesNotExistError
       status 410
-      {'description' => "The database #{db_name} does not exist."}.to_json
+      {'description' => "The database #{instance_name} does not exist."}.to_json
     rescue ServerNotReachableError
       status 500
       {'description' => 'PostgreSQL server is not reachable'}.to_json
@@ -65,15 +67,15 @@ class ServiceBrokerApi < Sinatra::Base
   delete '/v2/service_instances/:instance_id/service_bindings/:binding_id' do |instance_id, binding_id|
     content_type :json
 
-    username = "u#{binding_id}"
+    binding_name = "u#{binding_id}"
 
     begin
-      postgres_service.delete_user(username)
+      delete_binding(binding_name)
       status 200
       {}.to_json
     rescue UserDoesNotExistError
       status 410
-      {'description' => "The user #{username} does not exist."}.to_json
+      {'description' => "The user #{binding_name} does not exist."}.to_json
     rescue ServerNotReachableError
       status 500
       {'description' => 'PostgreSQL server is not reachable'}.to_json
@@ -87,15 +89,15 @@ class ServiceBrokerApi < Sinatra::Base
   delete '/v2/service_instances/:instance_id' do |instance_id|
     content_type :json
 
-    db_name = "d#{instance_id}"
+    instance_name = "d#{instance_id}"
 
     begin
-      postgres_service.delete_database(db_name)
+      delete_instance(instance_name)
       status 200
       {}.to_json
     rescue DatabaseDoesNotExistError
       status 410
-      {'description' => "The database #{db_name} does not exist."}.to_json
+      {'description' => "The database #{instance_name} does not exist."}.to_json
     rescue ServerNotReachableError
       status 500
       {'description' => 'PostgreSQL server is not reachable'}.to_json
@@ -109,15 +111,5 @@ class ServiceBrokerApi < Sinatra::Base
 
   def self.app_settings
     @app_settings ||= YAML.load_file('config/settings.yml')
-  end
-
-  def postgres_service
-    postgres_settings = {
-      'host' => ENV['POSTGRESQL_HOST'] || 'localhost',
-      'username' => ENV['POSTGRESQL_USERNAME'] || 'admin',
-      'password' => ENV['POSTGRESQL_PASSWORD'] || 'admin',
-      'port' => ENV['POSTGRESQL_PORT'].to_i || 5432,
-    }
-    PostgresqlHelper.new(postgres_settings)
   end
 end
