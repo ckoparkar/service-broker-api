@@ -26,4 +26,8 @@ class PostgresqlBroker < ServiceBrokerApi
     }
     PostgresqlHelper.new(postgres_settings)
   end
+
+  def ServiceBrokerApi.app_settings
+    @app_settings ||= YAML.load_file('config/settings.yml')
+  end
 end

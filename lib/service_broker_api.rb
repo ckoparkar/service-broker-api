@@ -110,10 +110,4 @@ class ServiceBrokerApi < Sinatra::Base
       {'description' => e.message}.to_json
     end
   end
-
-  private
-
-  def self.app_settings
-    @app_settings ||= YAML.load_file('config/settings.yml')
-  end
 end
