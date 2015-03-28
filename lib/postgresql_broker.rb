@@ -19,10 +19,10 @@ class PostgresqlBroker < ServiceBrokerApi
 
   def service
     postgres_settings = {
-      'host' => ENV['POSTGRESQL_HOST'] || 'localhost',
-      'username' => ENV['POSTGRESQL_USERNAME'] || 'admin',
-      'password' => ENV['POSTGRESQL_PASSWORD'] || 'admin',
-      'port' => ENV['POSTGRESQL_PORT'].to_i || 5432,
+      'host' => ENV.fetch('POSTGRESQL_HOST', 'localhost'),
+      'username' => ENV.fetch('POSTGRESQL_USERNAME', 'postgres'),
+      'password' => ENV.fetch('POSTGRESQL_PASSWORD', 'postgres'),
+      'port' => ENV.fetch('POSTGRESQL_PORT', 5432),
     }
     PostgresqlHelper.new(postgres_settings)
   end
