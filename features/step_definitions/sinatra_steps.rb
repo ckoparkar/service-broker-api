@@ -23,7 +23,7 @@ When(/^I create a service instance with :instance_id "(.*?)"$/) do |instance_id|
   if @databases.nil?
     expect(postgresql_service).to receive(:create_database).and_raise(ServerNotReachableError)
   elsif @databases.member? instance_id
-    expect(postgresql_service).to receive(:create_database).and_raise(DatabaseAlreadyExistsError)
+    expect(postgresql_service).to receive(:create_database).and_raise(ServiceInstanceAlreadyExistsError)
   else
     @databases << instance_id
     expect(postgresql_service).to receive(:create_database).and_return(path)
@@ -41,9 +41,9 @@ When(/^I bind app with :binding_id "(.*?)" to a service_instance with :instance_
   if @users.nil?
     expect(postgresql_service).to receive(:create_user).and_raise(ServerNotReachableError)
   elsif @users.member? binding_id
-    expect(postgresql_service).to receive(:create_user).and_raise(UserAlreadyExistsError)
+    expect(postgresql_service).to receive(:create_user).and_raise(BindingAlreadyExistsError)
   elsif ! @databases.member? instance_id
-    expect(postgresql_service).to receive(:create_user).and_raise(DatabaseDoesNotExistError)
+    expect(postgresql_service).to receive(:create_user).and_raise(ServiceInstanceDoesNotExistError)
   else
     @users << binding_id
     expect(postgresql_service).to receive(:create_user).and_return(path)
@@ -60,7 +60,7 @@ When(/^I unbind app with :binding_id "(.*?)" and :instance_id "(.*?)"$/) do |bin
   if @users.nil?
     expect(postgresql_service).to receive(:delete_user).and_raise(ServerNotReachableError)
   elsif ! @users.member? binding_id
-    expect(postgresql_service).to receive(:delete_user).and_raise(UserDoesNotExistError)
+    expect(postgresql_service).to receive(:delete_user).and_raise(BindingDoesNotExistError)
   else
     @users.delete binding_id
     expect(postgresql_service).to receive(:delete_user)
@@ -77,7 +77,7 @@ When(/^I un\-provision a service instance with :instance_id "(.*?)"$/) do |insta
   if @databases.nil?
     expect(postgresql_service).to receive(:delete_database).and_raise(ServerNotReachableError)
   elsif ! @databases.member? instance_id
-    expect(postgresql_service).to receive(:delete_database).and_raise(DatabaseDoesNotExistError)
+    expect(postgresql_service).to receive(:delete_database).and_raise(ServiceInstanceDoesNotExistError)
   else
     expect(postgresql_service).to receive(:delete_database)
   end

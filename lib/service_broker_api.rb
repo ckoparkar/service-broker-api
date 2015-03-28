@@ -3,6 +3,12 @@ require 'json'
 require 'yaml'
 require_relative 'postgresql_broker'
 
+class ServerNotReachableError < StandardError; end
+class ServiceInstanceAlreadyExistsError < StandardError; end
+class ServiceInstanceDoesNotExistError < StandardError; end
+class BindingAlreadyExistsError < StandardError; end
+class BindingDoesNotExistError < StandardError; end
+
 class ServiceBrokerApi < Sinatra::Base
   include PostgresqlBroker
 
@@ -25,7 +31,7 @@ class ServiceBrokerApi < Sinatra::Base
       dashboard_url = create_instance(instance_name)
       status 201
       {'dashboard_url' => dashboard_url}.to_json
-    rescue DatabaseAlreadyExistsError
+    rescue ServiceInstanceAlreadyExistsError
       status 409
       {'description' => "The database #{instance_name} already exists."}.to_json
     rescue ServerNotReachableError
@@ -48,10 +54,10 @@ class ServiceBrokerApi < Sinatra::Base
       credentials = bind_instance(binding_name, instance_name)
       status 201
       {'credentials' => credentials}.to_json
-    rescue UserAlreadyExistsError
+    rescue BindingAlreadyExistsError
       status 409
       {'description' => "The user #{binding_name} already exists."}.to_json
-    rescue DatabaseDoesNotExistError
+    rescue ServiceInstanceDoesNotExistError
       status 410
       {'description' => "The database #{instance_name} does not exist."}.to_json
     rescue ServerNotReachableError
@@ -73,7 +79,7 @@ class ServiceBrokerApi < Sinatra::Base
       delete_binding(binding_name)
       status 200
       {}.to_json
-    rescue UserDoesNotExistError
+    rescue BindingDoesNotExistError
       status 410
       {'description' => "The user #{binding_name} does not exist."}.to_json
     rescue ServerNotReachableError
@@ -95,7 +101,7 @@ class ServiceBrokerApi < Sinatra::Base
       delete_instance(instance_name)
       status 200
       {}.to_json
-    rescue DatabaseDoesNotExistError
+    rescue ServiceInstanceDoesNotExistError
       status 410
       {'description' => "The database #{instance_name} does not exist."}.to_json
     rescue ServerNotReachableError

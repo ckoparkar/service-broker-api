@@ -1,11 +1,5 @@
 require 'pg'
 
-class ServerNotReachableError < StandardError; end
-class DatabaseAlreadyExistsError < StandardError; end
-class DatabaseDoesNotExistError < StandardError; end
-class UserAlreadyExistsError < StandardError; end
-class UserDoesNotExistError < StandardError; end
-
 class PostgresqlHelper
   def initialize(params)
     @host = params['host']
@@ -67,13 +61,13 @@ class PostgresqlHelper
       yield if block_given?
     rescue => e
       if e.message.match /database \".*\" already exists/
-        raise DatabaseAlreadyExistsError
+        raise ServiceInstanceAlreadyExistsError
       elsif e.message.match /database \".*\" does not exist/
-        raise DatabaseDoesNotExistError
+        raise ServiceInstanceDoesNotExistError
       elsif e.message.match /role \".*\" already exists/
-        raise UserAlreadyExistsError
+        raise BindingAlreadyExistsError
       elsif e.message.match /role \".*\" does not exist/
-        raise UserDoesNotExistError
+        raise BindingDoesNotExistError
       elsif e.message.match /could not connect/
         raise ServerNotReachableError
       else
