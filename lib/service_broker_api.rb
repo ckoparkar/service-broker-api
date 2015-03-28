@@ -3,7 +3,7 @@ require 'json'
 require 'yaml'
 require_relative 'postgresql_helper'
 
-class PostgresqlBroker < Sinatra::Base
+class ServiceBrokerApi < Sinatra::Base
   use Rack::Auth::Basic do |username, password|
     credentials = self.app_settings.fetch('basic_auth')
     username == credentials.fetch('username') and password == credentials.fetch('password')

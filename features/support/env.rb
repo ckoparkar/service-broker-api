@@ -3,13 +3,13 @@ CodeClimate::TestReporter.start
 
 $: << File.expand_path("../../lib", File.dirname(__FILE__))
 
-require_relative '../../lib/postgresql_broker'
+require_relative '../../lib/service_broker_api'
 require 'rack/test'
 require 'cucumber/rspec/doubles'
 
 module AppHelper
   def app
-	PostgresqlBroker
+	ServiceBrokerApi
   end
 end
 

@@ -1,2 +1,2 @@
-require './postgres_broker'
-run PostgresBroker.new
+require './service_broker_api'
+run ServiceBrokerApi.new
