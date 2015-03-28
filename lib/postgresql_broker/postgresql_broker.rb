@@ -1,4 +1,4 @@
-require_relative 'service_broker_api'
+require_relative '../service_broker_api'
 require_relative 'postgresql_helper'
 
 class PostgresqlBroker < ServiceBrokerApi

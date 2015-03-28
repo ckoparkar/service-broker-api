@@ -1,2 +1,2 @@
-require_relative './lib/postgresql_broker'
+require_relative './lib/postgresql_broker/postgresql_broker'
 run PostgresqlBroker.new
