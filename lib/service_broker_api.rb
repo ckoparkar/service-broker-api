@@ -31,10 +31,10 @@ class ServiceBrokerApi < Sinatra::Base
       {'dashboard_url' => dashboard_url}.to_json
     rescue ServiceInstanceAlreadyExistsError
       status 409
-      {'description' => "The database #{instance_name} already exists."}.to_json
+      {'description' => "The service instance #{instance_name} already exists."}.to_json
     rescue ServerNotReachableError
       status 500
-      {'description' => 'PostgreSQL server is not reachable'}.to_json
+      {'description' => 'The server is not reachable'}.to_json
     rescue => e
       status 501
       {'description' => e.message}.to_json
@@ -54,13 +54,13 @@ class ServiceBrokerApi < Sinatra::Base
       {'credentials' => credentials}.to_json
     rescue BindingAlreadyExistsError
       status 409
-      {'description' => "The user #{binding_name} already exists."}.to_json
+      {'description' => "The binding #{binding_name} already exists."}.to_json
     rescue ServiceInstanceDoesNotExistError
       status 410
-      {'description' => "The database #{instance_name} does not exist."}.to_json
+      {'description' => "The service instance #{instance_name} does not exist."}.to_json
     rescue ServerNotReachableError
       status 500
-      {'description' => 'PostgreSQL server is not reachable'}.to_json
+      {'description' => 'The server is not reachable'}.to_json
     rescue => e
       status 501
       {'description' => e.message}.to_json
@@ -79,10 +79,10 @@ class ServiceBrokerApi < Sinatra::Base
       {}.to_json
     rescue BindingDoesNotExistError
       status 410
-      {'description' => "The user #{binding_name} does not exist."}.to_json
+      {'description' => "The binding #{binding_name} does not exist."}.to_json
     rescue ServerNotReachableError
       status 500
-      {'description' => 'PostgreSQL server is not reachable'}.to_json
+      {'description' => 'The server is not reachable'}.to_json
     rescue => e
       status 501
       {'description' => e.message}.to_json
@@ -101,10 +101,10 @@ class ServiceBrokerApi < Sinatra::Base
       {}.to_json
     rescue ServiceInstanceDoesNotExistError
       status 410
-      {'description' => "The database #{instance_name} does not exist."}.to_json
+      {'description' => "The service instance #{instance_name} does not exist."}.to_json
     rescue ServerNotReachableError
       status 500
-      {'description' => 'PostgreSQL server is not reachable'}.to_json
+      {'description' => 'The server is not reachable'}.to_json
     rescue => e
       status 501
       {'description' => e.message}.to_json
