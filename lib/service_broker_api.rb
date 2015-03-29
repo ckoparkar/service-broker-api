@@ -72,21 +72,7 @@ class ServiceBrokerApi < Sinatra::Base
     content_type :json
 
     binding_name = "u#{binding_id}"
-
-    begin
-      delete_binding(binding_name)
-      status 200
-      {}.to_json
-    rescue BindingDoesNotExistError
-      status 410
-      {'description' => "The binding #{binding_name} does not exist."}.to_json
-    rescue ServerNotReachableError
-      status 500
-      {'description' => 'The server is not reachable'}.to_json
-    rescue => e
-      status 501
-      {'description' => e.message}.to_json
-    end
+    delete_something(binding_name, "delete_binding", BindingDoesNotExistError, "The binding #{binding_name} does not exist.")
   end
 
   #DE-PROVISION
@@ -94,14 +80,19 @@ class ServiceBrokerApi < Sinatra::Base
     content_type :json
 
     instance_name = "d#{instance_id}"
+    delete_something(instance_name, "delete_instance", ServiceInstanceDoesNotExistError, "The service instance #{instance_name} does not exist.")
+  end
 
+  private
+
+  def delete_something(name, method_name, exception, message)
     begin
-      delete_instance(instance_name)
+      self.method(method_name).call(name)
       status 200
       {}.to_json
-    rescue ServiceInstanceDoesNotExistError
+    rescue exception
       status 410
-      {'description' => "The service instance #{instance_name} does not exist."}.to_json
+      {'description' => message}.to_json
     rescue ServerNotReachableError
       status 500
       {'description' => 'The server is not reachable'}.to_json
